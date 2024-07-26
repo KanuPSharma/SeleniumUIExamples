@@ -1,0 +1,5 @@
+utils\Page.class
+tests\Base.class
+tests\HomePageTest.class
+uipages\HomePage.class
+utils\BasePage.class
