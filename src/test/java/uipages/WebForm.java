@@ -15,20 +15,24 @@ public class WebForm extends BasePage {
 	private By id = By.id("my-text-id");
 	private By password = By.name("my-password");
 	private By textArea = By.name("my-textarea");
+	private By disabledInputField = By.name("my-disabled");
 	private By selectOption = By.name("my-select");
-	private By inputDataList = By.name("my-datalist");
-	private By listoptions = By.id("my-options");
 	private By date = By.name("my-date");
-	private By datePicker = By.xpath("//td[text()='3']");
 	private By btnRadio = By.id("my-radio-2");
 	private By linkToIndexPage = By.linkText("Return to index");
+	private IndexPage page;
+	
 
 	public WebForm(WebDriver driver) throws IOException {
 		super(driver);
 		this.driver = driver;
 		
 	}
-
+	@Override
+	public String getPageTitle() {
+		return super.getPageTitle();
+		 
+	}
 	public WebElement gettextId() {
 		return driver.findElement(id);
 	}
@@ -39,6 +43,13 @@ public class WebForm extends BasePage {
 
 	public WebElement gettextArea() {
 		return driver.findElement(textArea);
+	}
+	
+	public boolean isInputDisabled() {
+		if(!getElementBy(disabledInputField).isEnabled())
+			return true;
+		else
+		return false;
 	}
 
 	public void selectListOption(String str) {
@@ -104,6 +115,12 @@ public class WebForm extends BasePage {
 	 }
 	 
 	 
+	}
+	
+	public IndexPage navigateToIndexPage() throws IOException {
+		getElementBy(linkToIndexPage).click();
+		page= new IndexPage(driver);
+		return page;
 	}
 	
 }
