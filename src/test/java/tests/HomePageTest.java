@@ -15,8 +15,6 @@ public class HomePageTest extends BaseTest {
 	@BeforeTest(alwaysRun =true)
 	public void setUp() throws IOException {
 		super.testSetUp("");
-		
-		
 	}
 	@Test(dataProvider= "testData")
 	public void enterUserData(String userId, String password, String text) throws IOException {
