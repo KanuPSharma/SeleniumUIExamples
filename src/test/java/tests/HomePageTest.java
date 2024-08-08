@@ -20,6 +20,7 @@ public class HomePageTest extends BaseTest {
 	public void enterUserData(String userId, String password, String text) throws IOException {
 	
 		String title = form.getPageTitle();
+		System.out.println(title);
 		Assert.assertEquals(title, Constants.FORM_PAGE_TITLE);
 		System.out.println("WebForm is " + form.getlinkToIndexPage());
 		form.enterUserData(userId, password, text);

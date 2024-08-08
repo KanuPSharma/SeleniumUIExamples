@@ -19,6 +19,7 @@ public class IndexPageTest extends BaseTest {
 		takeScreenshot("step1");
 		index = new IndexPage(driver);
 		String title = index.getPageTitle();
+		System.out.println(title);
 		Assert.assertEquals(title, Constants.INDEX_PAGE_TITLE);
 		
 	}
