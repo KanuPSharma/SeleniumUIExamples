@@ -15,6 +15,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import uipages.IndexPage;
 import uipages.WebForm;
@@ -103,7 +107,7 @@ public class BaseTest {
 		System.out.println("BROWSER is " + BROWSER);
 		setDriver(BROWSER, BASE_URL);
 		wait = new FluentWait<WebDriver>(driver);
-		Assert.assertEquals(BASE_URL, driver.getCurrentUrl(), "Test Passed");
+		Assert.assertEquals(BASE_URL, driver.getCurrentUrl(), "Base URL is successfully launched");
 		form = new WebForm(driver);
 		index = new IndexPage(driver);
 
@@ -120,24 +124,39 @@ public class BaseTest {
 		}
 	}
 
-	public void takeScreenshot(String stepName) {
-		TakesScreenshot ts = (TakesScreenshot) driver;
-		File source = ts.getScreenshotAs(OutputType.FILE);
-		String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String path = ".//SeleniumUIExamples//src//main//resources//Screenshots//";
-		String destination = "./image.png";
-		System.out.println(destination);
-		File dest = new File(destination);
-		try {
-			FileUtils.copyFile(source, dest);
-		} catch (IOException e) {
-			e.printStackTrace();
+	@AfterMethod
+	public void takeScreenshot(ITestResult result) {
+		String testClassName = getTestClassName(result.getInstanceName()).trim();
+		String testMethodName = result.getName().toString().trim();
+		for (String s : ITestResult.finalStatuses()) {
+			if (s.contains("FAILURE") || s.contains("SKIP")) {
+				TakesScreenshot ts = (TakesScreenshot) driver;
+				File source = ts.getScreenshotAs(OutputType.FILE);
+				String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+				String path = "test-output/FailedTestsScreenshots/";
+				String destination = testClassName + testMethodName+ timestamp + "image.png";
+				File dest = new File(path + destination);
+				try {
+					FileUtils.copyFile(source, dest);
+				} catch (IOException e) {
+					System.out.println("Exception");
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
-	@AfterTest
+	public String getTestClassName(String testName) {
+		String[] reqTestClassname = testName.split("\\.");
+		int i = reqTestClassname.length - 1;
+		System.out.println("Required Test Name : " + reqTestClassname[i]);
+		return reqTestClassname[i];
+	}
+
+	@AfterClass
 	public void tearDown() {
 		driver.quit();
+		System.out.println("Quit the browser");
 	}
 
 }

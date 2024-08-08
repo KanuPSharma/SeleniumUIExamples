@@ -1,11 +1,9 @@
 package uipages;
 
 import java.io.IOException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-
 import utils.BasePage;
 
 public class IndexPage extends BasePage {
@@ -16,6 +14,7 @@ public class IndexPage extends BasePage {
 	private By lnkSwichToFrame=By.name("sameWindow");
 	public IndexPage(WebDriver driver) throws IOException {
 		super(driver);
+		this.driver=driver;
 	}
 	@Override
 	public String getPageTitle() {
@@ -25,10 +24,13 @@ public class IndexPage extends BasePage {
 		String window = getCurrentWindow();
 		getElementBy(lnkNewWindow).click();
 		setWindowHandle(window);
+		fluentWaitUntilElementDisplayed(getElementBy(txtNewWindow),true);
 		Assert.assertTrue(getElementBy(txtNewWindow).isDisplayed());
+		
 	}
 	public void switchToFrame() {
 		getElementBy(lnkSwichToFrame).click();
 		switchToFrame("iframe1-name");
+		
 	}
 }
