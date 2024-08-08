@@ -12,17 +12,12 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
-
 import uipages.IndexPage;
 import uipages.WebForm;
-
 
 public class BaseTest {
 	WebDriver driver;
@@ -32,8 +27,7 @@ public class BaseTest {
 	public static WebForm form;
 	public static IndexPage index;
 	Properties prop;
-	
-		
+
 	public WebDriver getDriver() {
 		return driver;
 
@@ -43,8 +37,7 @@ public class BaseTest {
 		Properties prop = new Properties();
 		FileInputStream in = null;
 		try {
-			in = new FileInputStream(
-					"C:\\Users\\NS-2\\eclipse-workspace\\SeleniumUIExamples\\src\\main\\resources\\env.properties");
+			in = new FileInputStream("SeleniumUIExamples/src/main/resources/env.properties");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,8 +68,6 @@ public class BaseTest {
 
 	private static WebDriver initChromeDriver(String appURL) {
 		System.out.println("Launching google chrome ..");
-		// System.setProperty("webdriver.chrome.driver", driverPath
-		// + "chromedriver.exe");
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.navigate().to(appURL);
@@ -85,32 +76,28 @@ public class BaseTest {
 
 	private static WebDriver initFirefoxDriver(String appURL) {
 		System.out.println("Launching Firefox browser..");
+		System.setProperty("webdriver.gecko.driver", "C:\\Selenium\\Gecko34\\geckodriver.exe");
 		WebDriver driver = new FirefoxDriver();
 		driver.manage().window().maximize();
 		driver.navigate().to(appURL);
 		return driver;
 	}
 
-	
 	public void testSetUp(String BASE_URL) throws IOException {
 		// WebDriverManager.chromedriver().setup();
 		prop = new Properties();
+		System.out.println(prop.getProperty(BASE_URL, "https://www.selenium.dev/selenium/web/web-form.html"));
 		FileInputStream in = null;
 		try {
-			in = new FileInputStream(
-				"C:\\Users\\NS-2\\eclipse-workspace\\SeleniumUIExamples\\src\\main\\resources\\env.properties");
+			in = new FileInputStream("src/main/resources/env.properties");
 			prop.load(in);
 		} catch (FileNotFoundException e) {
-			
+
 			e.printStackTrace();
 		}
-		
 
-		// System.setProperty("webdriver.chrome.driver",resourcesRoot+"drivers\\chromedriver_126.exe");
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless");
-		if(BASE_URL=="")
-		BASE_URL = prop.getProperty("URL");
+		if (BASE_URL == "")
+			BASE_URL = prop.getProperty("URL");
 		System.out.println("URL Is " + BASE_URL);
 		BROWSER = prop.getProperty("BROWSER");
 		System.out.println("BROWSER is " + BROWSER);
@@ -119,7 +106,7 @@ public class BaseTest {
 		Assert.assertEquals(BASE_URL, driver.getCurrentUrl(), "Test Passed");
 		form = new WebForm(driver);
 		index = new IndexPage(driver);
-		
+
 	}
 
 	public void switchWindows() throws Exception {
@@ -137,20 +124,20 @@ public class BaseTest {
 		TakesScreenshot ts = (TakesScreenshot) driver;
 		File source = ts.getScreenshotAs(OutputType.FILE);
 		String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String path =".//SeleniumUIExamples//src//main//resources//Screenshots//";
+		String path = ".//SeleniumUIExamples//src//main//resources//Screenshots//";
 		String destination = "./image.png";
 		System.out.println(destination);
-		File dest = new File (destination);
+		File dest = new File(destination);
 		try {
 			FileUtils.copyFile(source, dest);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@AfterTest
 	public void tearDown() {
-		//driver.quit();
+		driver.quit();
 	}
 
 }
