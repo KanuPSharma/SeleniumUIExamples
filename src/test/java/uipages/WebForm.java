@@ -21,18 +21,18 @@ public class WebForm extends BasePage {
 	private By btnRadio = By.id("my-radio-2");
 	private By linkToIndexPage = By.linkText("Return to index");
 	private IndexPage page;
-	
 
 	public WebForm(WebDriver driver) throws IOException {
 		super(driver);
 		this.driver = driver;
-		
 	}
+
 	@Override
 	public String getPageTitle() {
 		return super.getPageTitle();
-		 
+
 	}
+
 	public WebElement gettextId() {
 		return driver.findElement(id);
 	}
@@ -44,45 +44,44 @@ public class WebForm extends BasePage {
 	public WebElement gettextArea() {
 		return driver.findElement(textArea);
 	}
-	
+
 	public boolean isInputDisabled() {
-		if(!getElementBy(disabledInputField).isEnabled())
+		if (!getElementBy(disabledInputField).isEnabled())
 			return true;
 		else
-		return false;
+			return false;
 	}
 
 	public void selectListOption(String str) {
 		Random random = new Random();
-		int num =1+random.nextInt(3);
+		int num = 1 + random.nextInt(3);
 		System.out.println("Select value is " + num);
-		switch(num) {
-			case 1:
-				str="One";
-				break;
-			
-			case 2:
-				str="Two";
-				break;
-			
-			case 3:
-				str="Three";
-				break;
-			
-			default:
-			str="Two";
+		switch (num) {
+		case 1:
+			str = "One";
+			break;
+
+		case 2:
+			str = "Two";
+			break;
+
+		case 3:
+			str = "Three";
+			break;
+
+		default:
+			str = "Two";
 		}
 		Select selects = new Select(driver.findElement(selectOption));
-		
+
 		selects.selectByVisibleText(str);
 	}
 
-	
 	public void selectDate(int dateVal) {
 		getElementBy(date).click();
-		String datePickerStr ="//td[text()='"+ dateVal +"']";
+		String datePickerStr = "//td[text()='" + dateVal + "']";
 		System.out.println(datePickerStr);
-		By datePicker=By.xpath(datePickerStr);
+		By datePicker = By.xpath(datePickerStr);
 		getElementBy(datePicker).click();
 	}
 
@@ -104,23 +103,21 @@ public class WebForm extends BasePage {
 	public void enterFormOptions() {
 		getElementBy(btnRadio).click();
 	}
-	
+
 	public void clickCheckboxes() {
-	 List<WebElement> chkBoxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
-	 
-	 for(int i= 0;i<chkBoxes.size();i++) {
-		 if(!chkBoxes.get(i).isSelected())
-		 chkBoxes.get(i).click();
-		 //Assert.assertTrue(chkBoxes.get(i).isSelected());
-	 }
-	 
-	 
+		List<WebElement> chkBoxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
+
+		for (int i = 0; i < chkBoxes.size(); i++) {
+			if (!chkBoxes.get(i).isSelected())
+				chkBoxes.get(i).click();
+			// Assert.assertTrue(chkBoxes.get(i).isSelected());
+		}
 	}
-	
+
 	public IndexPage navigateToIndexPage() throws IOException {
 		getElementBy(linkToIndexPage).click();
-		page= new IndexPage(driver);
+		page = new IndexPage(driver);
 		return page;
 	}
-	
+
 }
